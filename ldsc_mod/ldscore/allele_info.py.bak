@@ -1,5 +1,4 @@
 import itertools as it
-from functools import reduce
 '''
 Contains useful objects related to allele relationships for ../munge_sumstats/py and sumstats.py
 
