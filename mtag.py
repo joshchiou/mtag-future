@@ -179,8 +179,14 @@ def _perform_munge(args, GWAS_df, GWAS_dat_gen, p):
     a2_munge = None if args.a2_name == "a2" else args.a2_name
     eaf_munge = None if args.eaf_name == "freq" else args.eaf_name
     p_munge = None if args.p_name == "p" else args.p_name
+    if args.log10p_name is not None:
+        GWAS_df["P"] = 10 ** -GWAS_df[args.log10p_name]
+        p_munge = "P"
     beta_munge = args.beta_name if args.beta_name is not None else "beta"
     z_munge = args.z_name if args.z_name is not None else "z"
+    if args.beta_name is not None and args.se_name is not None:
+        GWAS_df["Z"] = GWAS_df[args.beta_name] / GWAS_df[args.se_name]
+        args.z_name = z_munge = "Z"
     n_add = args.n_list[p] if args.n_value is not None else None
 
     if args.use_beta_se:
@@ -2112,6 +2118,12 @@ input_formatting.add_argument(
     type=str,
     help='Name of the column containing the p-value of the effect size in the GWAS input. Default is "p".',
 )
+input_formatting.add_argument(
+    "--log10p_name",
+    default="log10p",
+    type=str,
+    help='Name of the column containing the log10 p-value of the effect size in the GWAS input. Default is "log10p".',
+)
 
 filter_opts = parser.add_argument_group(
     title="Filter Options",
@@ -2138,7 +2150,7 @@ filter_opts.add_argument(
     default=None,
     type=str,
     action="store",
-    help="Restrict MTAG to SNPs on one of the listed, comma-separated chromosome. Can be specified simultaneously with --include and --exclude, but will take precedent over both. Not generally recommended. Multiple chromosome numbers should be separated by commas without whitespace. If this option is specified, the GWAS summary statistics must also list the chromosome of each SNPs in a column named \`chr\`.",
+    help=r"Restrict MTAG to SNPs on one of the listed, comma-separated chromosome. Can be specified simultaneously with --include and --exclude, but will take precedent over both. Not generally recommended. Multiple chromosome numbers should be separated by commas without whitespace. If this option is specified, the GWAS summary statistics must also list the chromosome of each SNPs in a column named \`chr\`.",
 )
 filter_opts.add_argument(
     "--homogNs_frac",
