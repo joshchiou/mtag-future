@@ -2,6 +2,11 @@
 
 `mtag` is a Python-based command line tool for jointly analyzing multiple sets of GWAS summary statistics as described by [Turley et. al. (2018)](https://www.nature.com/articles/s41588-017-0009-4). It can also be used as a tool to meta-analyze GWAS results.
 
+## Modified Nov 22 2024
+- futurize ldsc_mod
+- add support for log10p
+- add support for automatic z-score calculation from beta and se
+
 ## Getting Started
 
 We recommend installing the [Anaconda python distribution](https://www.anaconda.com/download/) as it includes all of the packages listed below. It also makes updating packages relatively painless with the `conda update` command.
