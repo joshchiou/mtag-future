@@ -396,10 +396,17 @@ def load_and_merge_data(args):
                 p + 1, len(GWAS_d[p]), GWAS_input
             )
         )
-        if args.log10p_name is not None:
+        if args.log10p_name is not None and args.log10p_name in GWAS_d[p].columns:
+            if args.p_name is not None and args.p_name in GWAS_d[p].columns:
+                GWAS_d[p] = GWAS_d[p].drop(args.p_name, axis=1)
             GWAS_d[p]["P"] = 10 ** -GWAS_d[p][args.log10p_name]
             args.p_name = "P"
-        if args.beta_name is not None and args.se_name is not None:
+        if (
+            args.beta_name is not None
+            and args.se_name is not None
+            and args.beta_name in GWAS_d[p].columns
+            and args.se_name in GWAS_d[p].columns
+        ):
             GWAS_d[p]["Z"] = GWAS_d[p][args.beta_name] / GWAS_d[p][args.se_name]
             args.z_name = "Z"
 
