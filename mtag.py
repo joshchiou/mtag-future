@@ -15,6 +15,7 @@ import joblib
 import sys, gzip, bz2
 import logging
 from argparse import Namespace
+from functools import reduce
 
 from ldsc_mod.ldscore import sumstats as sumstats_sig
 from ldsc_mod.ldscore import allele_info
@@ -47,7 +48,7 @@ header += "\n\n"
 
 pd.set_option("display.max_rows", 500)
 pd.set_option("display.width", 800)
-pd.set_option("precision", 12)
+pd.set_option("display.precision", 12)
 pd.set_option("max_colwidth", 800)
 pd.set_option("colheader_justify", "left")
 
