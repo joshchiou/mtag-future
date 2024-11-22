@@ -179,14 +179,8 @@ def _perform_munge(args, GWAS_df, GWAS_dat_gen, p):
     a2_munge = None if args.a2_name == "a2" else args.a2_name
     eaf_munge = None if args.eaf_name == "freq" else args.eaf_name
     p_munge = None if args.p_name == "p" else args.p_name
-    if args.log10p_name is not None:
-        GWAS_df["P"] = 10 ** -GWAS_df[args.log10p_name]
-        p_munge = "P"
     beta_munge = args.beta_name if args.beta_name is not None else "beta"
     z_munge = args.z_name if args.z_name is not None else "z"
-    if args.beta_name is not None and args.se_name is not None:
-        GWAS_df["Z"] = GWAS_df[args.beta_name] / GWAS_df[args.se_name]
-        args.z_name = z_munge = "Z"
     n_add = args.n_list[p] if args.n_value is not None else None
 
     if args.use_beta_se:
@@ -223,7 +217,7 @@ def _perform_munge(args, GWAS_df, GWAS_dat_gen, p):
             keep_maf=True,
             daner_n=False,
             keep_str_ambig=True,
-            input_datgen=GWAS_dat_gen,
+            input_datgen=[GWAS_df],
             cnames=list(original_cols),
             n_value=n_add,
         )
@@ -261,7 +255,7 @@ def _perform_munge(args, GWAS_df, GWAS_dat_gen, p):
             keep_maf=True,
             daner_n=False,
             keep_str_ambig=True,
-            input_datgen=GWAS_dat_gen,
+            input_datgen=[GWAS_df],
             cnames=list(original_cols),
             n_value=n_add,
         )
@@ -402,6 +396,12 @@ def load_and_merge_data(args):
                 p + 1, len(GWAS_d[p]), GWAS_input
             )
         )
+        if args.log10p_name is not None:
+            GWAS_d[p]["P"] = 10 ** -GWAS_d[p][args.log10p_name]
+            args.p_name = "P"
+        if args.beta_name is not None and args.se_name is not None:
+            GWAS_d[p]["Z"] = GWAS_d[p][args.beta_name] / GWAS_d[p][args.se_name]
+            args.z_name = "Z"
 
         # perform munge sumstats
         GWAS_d[p], sumstats_format[p] = _perform_munge(args, GWAS_d[p], gwas_dat_gen, p)
