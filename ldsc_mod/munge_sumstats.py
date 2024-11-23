@@ -246,7 +246,7 @@ def parse_dat(dat_gen, convert_colname, merge_alleles, args):
             lambda x: x != 'INFO', dat.columns)).reset_index(drop=True)
         drops['NA'] += old - len(dat)
         dat.columns = map(lambda x: convert_colname[x], dat.columns)
-        ii = np.array([True for i in xrange(len(dat))])
+        ii = np.array([True for i in range(len(dat))])
         if args.merge_alleles:
             old = ii.sum()
             ii = dat.SNP.isin(merge_alleles.SNP)
@@ -255,7 +255,7 @@ def parse_dat(dat_gen, convert_colname, merge_alleles, args):
                 continue
 
             dat = dat[ii].reset_index(drop=True)
-            ii = np.array([True for i in xrange(len(dat))])
+            ii = np.array([True for i in range(len(dat))])
 
         if 'INFO' in dat.columns:
             old = ii.sum()
