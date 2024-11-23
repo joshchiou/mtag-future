@@ -584,7 +584,7 @@ def _rg(sumstats, args, log, M_annot, ref_ld_cnames, w_ld_cname, i1, i2):
         n_snp = np.sum(ii)  # lambdas are late binding, so this works
         sumstats = sumstats[ii]
     n_blocks = min(args.n_blocks, n_snp)
-    ref_ld = sumstats.as_matrix(columns=ref_ld_cnames)
+    ref_ld = sumstats[ref_ld_cnames].to_numpy()
     intercepts = [args.intercept_h2[i1], args.intercept_h2[i2], args.intercept_gencov[i2]]
     rghat = reg.RG(s(sumstats.Z1), s(sumstats.Z2),
                    ref_ld, s(sumstats[w_ld_cname]), s(
